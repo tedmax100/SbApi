@@ -1,7 +1,9 @@
 import * as bodyParser from "body-parser";
 import express from "express";
 import {NextFunction, Request, RequestHandler, Response, ErrorRequestHandler } from "express";
+import * as cookieParser from "cookie-parser";
 import * as SbVerify from "./middleware/sb_middle";
+import * as shopbackApi from "./route/shopbackApi";
 // Creates and configures an ExpressJS web server.
 class App {
     public express: express.Application;
@@ -21,6 +23,7 @@ class App {
     }
     private middleware(): void {
         this.express.use(bodyParser.json());
+        this.express.use(cookieParser.default())
         this.express.use(SbVerify.default);
 /*         this.express.use(bodyParser.urlencoded({ extended: false })); */
     }
@@ -31,6 +34,7 @@ class App {
      *      -- check the sample
      */
     private routes(): void {
+        this.express.use('/shopback', new shopbackApi.default().router);
     }
 
     // error handler
